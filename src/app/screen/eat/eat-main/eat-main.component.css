@@ -1,5 +1,12 @@
+.eat_div{
+  position: relative;
+  width: 100%;
+  /*margin: 0 auto;*/
+}
+
 .eat_place_map_container{
   width: 1000px;
+  margin: 0 auto;
 }
 
 .eat_place_map{

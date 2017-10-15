@@ -1,4 +1,11 @@
 <p>
   eat-place-type-compare works!
 </p>
-<div #echart1></div>
+<div style="width:1200px;margin: 0 auto">
+<div  [ngBusy]="busy1" style="height: 500px;width: 800px" class="eat-plot">
+  <div #echart1 style="height: 100%;width: 100%"></div>
+</div>
+
+<div [ngBusy]="busy2"  #echart2 style="height: 500px;width: 400px;margin-top: 40px" class="eat-plot">
+</div>
+</div>

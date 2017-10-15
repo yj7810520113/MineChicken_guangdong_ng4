@@ -30,14 +30,18 @@ import { EatMainComponent } from './screen/eat/eat-main/eat-main.component';
 import {EatPlaceMapComponent} from "./screen/eat/eat-place-map/eat-place-map.component";
 import {EatMuduleModule} from "./screen/eat/eat-mudule/eat-mudule.module";
 import { EatPlaceMap2014Component } from './screen/eat/eat-place-map-2014/eat-place-map-2014.component';
-import { EatPlaceTypeCompareComponent } from './screen/eat/eat-place-type-compare/eat-place-type-compare.component';
+import { EatBabyMilkComponent } from './screen/eat/eat-baby-milk/eat-baby-milk.component';
+import { EatVegemarketMapComponent } from './screen/eat/eat-vegemarket-map/eat-vegemarket-map.component';
+import { EatVegemarketMap2014Component } from './screen/eat/eat-vegemarket-map-2014/eat-vegemarket-map-2014.component';
+import {TravelModuleModule} from "./screen/travel/travel-module/travel-module.module";
+import { TravelBicycleMapComponent } from './screen/travel/travel-bicycle-map/travel-bicycle-map.component';
+import { TravelMainComponent } from './screen/travel/travel-main/travel-main.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     StartDialogComponent,
-    EatPlaceTypeCompareComponent,
     // EatMainComponent,
   ],
   imports: [
@@ -47,6 +51,7 @@ import { EatPlaceTypeCompareComponent } from './screen/eat/eat-place-type-compar
     FormsModule,
     RouterModule.forRoot(appRoutes),
     EatMuduleModule,
+    TravelModuleModule,
 
 
     MdChipsModule,

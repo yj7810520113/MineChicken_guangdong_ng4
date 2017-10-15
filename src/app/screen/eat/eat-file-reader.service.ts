@@ -27,6 +27,21 @@ export class EatFileReaderService {
   private EatPlaceMapdata2014;
   private EatPlaceMapObservable2014: Observable<any>;
 
+  private EatBabyMilkUrl:string = 'assets/file/trans食品流通企业';
+
+  private EatBabyMilkdata;
+  private EatBabyMilkObservable: Observable<any>;
+
+  private EatVegeMarketMapUrl:string = 'assets/file/trans菜市场';
+
+  private EatVegeMarketMapdata;
+  private EatVegeMarketMapObservable: Observable<any>;
+
+  private EatVegeMarketMapUrl2014:string = 'assets/file/trans菜市场2014';
+
+  private EatVegeMarketMapdata2014;
+  private EatVegeMarketMapObservable2014: Observable<any>;
+
 
   getEatPlaceMapData1() {
     if(this.EatPlaceMapdata1) {
@@ -75,6 +90,77 @@ export class EatFileReaderService {
     }
   }
 
+
+  getEatBabyMilkData() {
+    if(this.EatBabyMilkdata) {
+      // if `data` is available just return it as `Observable`
+      return Observable.of(this.EatBabyMilkdata);
+    } else if(this.EatBabyMilkObservable) {
+      // if `this.observable` is set then the request is in progress
+      // return the `Observable` for the ongoing request
+      return this.EatBabyMilkObservable;
+    } else {
+      this.EatBabyMilkObservable = this.readCSVFileToJson(this.EatBabyMilkUrl)
+        .map(response =>  {
+            // when the cached data is available we don't need the `Observable` reference anymore
+            this.EatBabyMilkObservable = null;
+
+
+            this.EatBabyMilkdata =response;
+            return this.EatBabyMilkdata;
+          }
+        ).share();
+      return this.EatBabyMilkObservable;
+    }
+  }
+
+
+  getEatVegeMarketMapData() {
+    if(this.EatVegeMarketMapdata) {
+      // if `data` is available just return it as `Observable`
+      return Observable.of(this.EatVegeMarketMapdata);
+    } else if(this.EatVegeMarketMapObservable) {
+      // if `this.observable` is set then the request is in progress
+      // return the `Observable` for the ongoing request
+      return this.EatVegeMarketMapObservable;
+    } else {
+      this.EatVegeMarketMapObservable = this.readCSVFileToJson(this.EatVegeMarketMapUrl)
+        .map(response =>  {
+            // when the cached data is available we don't need the `Observable` reference anymore
+            this.EatVegeMarketMapObservable = null;
+
+
+            this.EatVegeMarketMapdata =response;
+            return this.EatVegeMarketMapdata;
+          }
+        ).share();
+      return this.EatVegeMarketMapObservable;
+    }
+  }
+
+  getEatVegeMarketMapData2014() {
+    if(this.EatVegeMarketMapdata2014) {
+      // if `data` is available just return it as `Observable`
+      return Observable.of(this.EatVegeMarketMapdata2014);
+    } else if(this.EatVegeMarketMapObservable2014) {
+      // if `this.observable` is set then the request is in progress
+      // return the `Observable` for the ongoing request
+      return this.EatVegeMarketMapObservable2014;
+    } else {
+      this.EatVegeMarketMapObservable2014 = this.readCSVFileToJson(this.EatVegeMarketMapUrl2014)
+        .map(response =>  {
+            // when the cached data is available we don't need the `Observable` reference anymore
+            this.EatVegeMarketMapObservable2014 = null;
+
+
+            this.EatVegeMarketMapdata2014 =response;
+            return this.EatVegeMarketMapdata2014;
+          }
+        ).share();
+      return this.EatVegeMarketMapObservable2014;
+    }
+  }
+
   readCSVFileToJson(path:string):any{
     return this.readCDNCSVFileToJson(path);
   }
@@ -114,12 +200,14 @@ export class EatFileReaderService {
     let result = [];
     let headers = lines[0].split(',');
     for (let i = 1; i < lines.length; i++) {
-      var obj = {};
-      var objs = lines[i].split(',');
-      for (let j = 0; j < headers.length; j++) {
-        obj[(headers[j].replace(/\r/, ''))] = objs[j];
+      if(lines[i].trim()!='') {
+        var obj = {};
+        var objs = lines[i].split(',');
+        for (let j = 0; j < headers.length; j++) {
+          obj[(headers[j].replace(/\r/, ''))] = objs[j];
+        }
+        result.push(obj);
       }
-      result.push(obj);
 
 
     }

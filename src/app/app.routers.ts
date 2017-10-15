@@ -11,5 +11,10 @@ export const appRoutes=[
   {
     path:'eat',
     loadChildren:'./screen/eat/eat-mudule/eat-mudule.module#EatMuduleModule'
+  },
+  {
+    path:'travel',
+    loadChildren:'./screen/travel/travel-module/travel-module.module#TravelModuleModule',
   }
+
 ];
