@@ -19,6 +19,17 @@ export class TravelFileReaderService {
   private TravelPlaceMapObservable1: Observable<any>;
 
 
+  private TravelBusMapUrl1:string = 'assets/file/trans公交站点';
+
+  private TravelBusMapdata1;
+  private TravelBusMapObservable1: Observable<any>;
+
+
+  private TravelAQIUrl1:string = 'assets/file/aqi';
+
+  private TravelAQIdata1;
+  private TravelAQIObservable1: Observable<any>;
+
 
 
   getTravelPlaceMapData1() {
@@ -41,6 +52,52 @@ export class TravelFileReaderService {
           }
         ).share();
       return this.TravelPlaceMapObservable1;
+    }
+  }
+
+  getTravelBusMapData1() {
+    if(this.TravelBusMapdata1) {
+      // if `data` is available just return it as `Observable`
+      return Observable.of(this.TravelBusMapdata1);
+    } else if(this.TravelBusMapObservable1) {
+      // if `this.observable` is set then the request is in progress
+      // return the `Observable` for the ongoing request
+      return this.TravelBusMapObservable1;
+    } else {
+      this.TravelBusMapObservable1 = this.readCSVFileToJson(this.TravelBusMapUrl1)
+        .map(response =>  {
+            // when the cached data is available we don't need the `Observable` reference anymore
+            this.TravelBusMapObservable1 = null;
+
+
+            this.TravelBusMapdata1 =response;
+            return this.TravelBusMapdata1;
+          }
+        ).share();
+      return this.TravelBusMapObservable1;
+    }
+  }
+
+  getTravelAQIData1() {
+    if(this.TravelAQIdata1) {
+      // if `data` is available just return it as `Observable`
+      return Observable.of(this.TravelAQIdata1);
+    } else if(this.TravelAQIObservable1) {
+      // if `this.observable` is set then the request is in progress
+      // return the `Observable` for the ongoing request
+      return this.TravelAQIObservable1;
+    } else {
+      this.TravelAQIObservable1 = this.readCSVFileToJson(this.TravelAQIUrl1)
+        .map(response =>  {
+            // when the cached data is available we don't need the `Observable` reference anymore
+            this.TravelAQIObservable1 = null;
+
+
+            this.TravelAQIdata1 =response;
+            return this.TravelAQIdata1;
+          }
+        ).share();
+      return this.TravelAQIObservable1;
     }
   }
 

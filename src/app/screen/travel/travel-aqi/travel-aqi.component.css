@@ -1,0 +1,15 @@
+.bar-container{
+  height: 400px;
+  width: 900px;
+  float: left;
+}
+.pie-container{
+  height: 400px;
+  width: 400px;
+  float: left;
+}
+.info-container{
+  height: 400px;
+  width: 200px;
+  float: left;
+}

@@ -36,6 +36,7 @@ import { EatVegemarketMap2014Component } from './screen/eat/eat-vegemarket-map-2
 import {TravelModuleModule} from "./screen/travel/travel-module/travel-module.module";
 import { TravelBicycleMapComponent } from './screen/travel/travel-bicycle-map/travel-bicycle-map.component';
 import { TravelMainComponent } from './screen/travel/travel-main/travel-main.component';
+import { TravelAqiComponent } from './screen/travel/travel-aqi/travel-aqi.component';
 
 
 @NgModule({

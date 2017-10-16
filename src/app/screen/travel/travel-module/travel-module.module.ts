@@ -5,6 +5,7 @@ import {TravelMainComponent} from "../travel-main/travel-main.component";
 import {travelRouters} from "./travel-Router";
 import {RouterModule} from "@angular/router";
 import {TravelFileReaderService} from "../travel-file-reader.service";
+import {TravelAqiComponent} from "../travel-aqi/travel-aqi.component";
 
 @NgModule({
   imports: [
@@ -15,6 +16,8 @@ import {TravelFileReaderService} from "../travel-file-reader.service";
   declarations: [
     TravelMainComponent,
     TravelBicycleMapComponent,
+    TravelAqiComponent,
+
 
   ],
   providers:[

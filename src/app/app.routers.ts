@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 export const appRoutes=[
   {
     path:'',
-    redirectTo:'eat',
+    redirectTo:'travel',
     pathMatch:'full'
   },
   {
