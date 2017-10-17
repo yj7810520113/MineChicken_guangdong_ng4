@@ -12,7 +12,8 @@ export class EatPlaceMap2014Component implements OnInit {
   @ViewChild('svg') private svg;
 
 
-
+  private tooltipDiv;
+  private bodyNode = d3.select('body').node();
 
   private projection;
   private hexRadius;
@@ -23,8 +24,8 @@ export class EatPlaceMap2014Component implements OnInit {
   private margin = { top: 10, right: 10, bottom: 10, left: 10 };
   private svgHeight= 400;
   private svgWidth = 400;
-  private colNum=80;
-  private rowNum=100;
+  private colNum=40;
+  private rowNum=55;
 
   //切割路径，防止溢出
   private defs;
@@ -53,6 +54,72 @@ export class EatPlaceMap2014Component implements OnInit {
         // console.log(res)
         this.render(res[0],res[1]);
       });
+
+    //  监听地图联动
+    this.eatFileReaderService.getSelectFormSubject()
+      .subscribe(x=>{
+          // if(x[0]=='食品流通企业'){
+          Observable.forkJoin(
+            this.fileReaderSerivce.getTopoData(),
+            this.eatFileReaderService.getEatPlaceMapData2014(),
+            this.eatFileReaderService.getEatBabyMilkData2014()
+          )
+            .subscribe(x1=>{
+              let index=1;
+              if(x[0]=='餐饮服务单位'){
+                index=1;
+              }
+              else {
+                index=2;
+              }
+              // console.log(index)
+              if(x[1]=='小'){
+                this.rowNum=30;
+                this.colNum=20;
+              }
+              else if(x[1]=='中'){
+                this.rowNum=55;
+                this.colNum=40;
+              }
+              else {
+                this.rowNum=100;
+                this.colNum=80;
+              }
+              let topojson = this.prepData(x1[0]);
+              let points = this.createPointGrid(this.rowNum, this.colNum);
+              // console.log(points)
+//
+              let polygonPoints = this.getPolygonPoints(topojson);
+
+              // console.log(polygonPoints)
+              let usPoints = this.keepPointsInPolygon(points, polygonPoints);
+              // console.log(usPoints)
+
+              let dataPoints = this.getDatapoints(x[2]==''?x1[index]:x1[index].filter(result=>{
+                if(x[2]=='全部'){
+                  return true;
+                }
+                return result['类型'].trim()==x[2];
+              }))
+
+              // console.log(dataPoints.sort((a,b)=>a.x-b.x))
+              let mergedPoints = usPoints.concat(dataPoints)
+              // console.log(mergedPoints)
+
+
+              let hexPoints = this.getHexpoints(mergedPoints);
+              // console.log(hexPoints)
+
+
+              let hexPointsWithCount = this.getHexpointsWithCount(hexPoints);
+
+
+
+              this.reDrawHexmap(hexPointsWithCount);
+            })
+
+        }
+      )
 
   }
 
@@ -96,11 +163,86 @@ export class EatPlaceMap2014Component implements OnInit {
 
   drawHexmap(points) {
 
-    let hexes = this.svg.append('g').attr('id', 'hexes')
+    // console.log(points)
+
+    let hexes = this.svg.append('g').attr('class', 'hexes')
       .selectAll('.hex')
-      .data(points)
+      .data(points.filter(d=>{
+        return d.datapoints>0;
+      }))
       .enter().append('path')
       .attr('class', 'hexes')
+      .attr('transform', (d)=>{ return 'translate(' + d.x + ', ' + d.y + ')'; })
+      .attr('d', this.hexbin.hexagon())
+      .style('fill', '#ddd')
+      .style('fill', (d) =>{
+        if(d.datapoints==0){
+          // console.log("1111111111111111111111")
+          return '#fff';
+        }
+        else
+          return this.colourScale(d.datapoints);
+      })
+      .style('stroke', '#999')
+      .style('stroke-width', 1)
+      .on('mouseover',d=>{
+        // console.log('mouseover')
+        d3.select('body').selectAll('div.mytooltip').remove();
+        // Append tooltip
+        this.tooltipDiv = d3.select('body')
+          .append('div')
+          .attr('class', 'mytooltip')
+        let absoluteMousePos = d3.mouse(this.bodyNode);
+        // console.log(absoluteMousePos)
+        // this.tooltipDiv.style({
+        //   'left': (absoluteMousePos[0] + 10)+'px',
+        //   'top': (absoluteMousePos[1] - 40)+'px',
+        //   'background-color': '#d8d5e4',
+        //   'width': '65px',
+        //   'height': '30px',
+        //   'padding': '5px',
+        //   'position': 'absolute',
+        //   'z-index': 1001,
+        //   'box-shadow': '0 1px 2px 0 #656565'
+        // });
+
+        this.tooltipDiv.style('left',(absoluteMousePos[0] + 10)+'px');
+        this.tooltipDiv.style('top',(absoluteMousePos[1] - 40)+'px');
+        this.tooltipDiv.style('background-color','#000');
+        this.tooltipDiv.style('color','#fff');
+        this.tooltipDiv.style('width','90px');
+        this.tooltipDiv.style('height','60  px');
+        this.tooltipDiv.style('padding','5px');
+        this.tooltipDiv.style('position','absolute');
+        this.tooltipDiv.style('font-size','12px');
+        this.tooltipDiv.style('z-index',10001);
+        this.tooltipDiv.style('box-shadow','0 1px 2px 0 #656565');
+
+
+        // console.log(this.tooltipDiv.style())
+
+        let first_line = '2017年<br>'
+        let second_line = '该蜂窝格网附近有：<span style="color:#d94e5d">'+d.datapoints+"</span>家店铺"
+
+        // console.log(this.tooltipDiv)
+        this.tooltipDiv.html(first_line + second_line)
+      })
+      .on('mouseout',d=>{
+        this.tooltipDiv.remove()
+      });
+
+  } // drawHexmap()
+
+  reDrawHexmap(points) {
+    // console.log(this.svg.select('.hexes'))
+    this.svg.select('.hexes').selectAll('*').remove();
+    let hexes = this.svg.select('.hexes')
+      .selectAll('.hex')
+      .data(points.filter(d=>{
+        return d.datapoints>0;
+      }))
+      .enter().append('path')
+      .attr('class', 'hex')
       .attr('transform', (d)=>{ return 'translate(' + d.x + ', ' + d.y + ')'; })
       .attr('d', this.hexbin.hexagon())
       .style('fill', '#ddd')
@@ -112,7 +254,52 @@ export class EatPlaceMap2014Component implements OnInit {
           return this.colourScale(d.datapoints);
       })
       .style('stroke', '#999')
-      .style('stroke-width', 1);
+      .style('stroke-width', 1)
+      .on('mouseover',d=>{
+        // console.log('mouseover')
+        d3.select('body').selectAll('div.mytooltip').remove();
+        // Append tooltip
+        this.tooltipDiv = d3.select('body')
+          .append('div')
+          .attr('class', 'mytooltip')
+        let absoluteMousePos = d3.mouse(this.bodyNode);
+        // console.log(absoluteMousePos)
+        // this.tooltipDiv.style({
+        //   'left': (absoluteMousePos[0] + 10)+'px',
+        //   'top': (absoluteMousePos[1] - 40)+'px',
+        //   'background-color': '#d8d5e4',
+        //   'width': '65px',
+        //   'height': '30px',
+        //   'padding': '5px',
+        //   'position': 'absolute',
+        //   'z-index': 1001,
+        //   'box-shadow': '0 1px 2px 0 #656565'
+        // });
+
+        this.tooltipDiv.style('left',(absoluteMousePos[0] + 10)+'px');
+        this.tooltipDiv.style('top',(absoluteMousePos[1] - 40)+'px');
+        this.tooltipDiv.style('background-color','#000');
+        this.tooltipDiv.style('color','#fff');
+        this.tooltipDiv.style('width','90px');
+        this.tooltipDiv.style('height','60  px');
+        this.tooltipDiv.style('padding','5px');
+        this.tooltipDiv.style('position','absolute');
+        this.tooltipDiv.style('font-size','12px');
+        this.tooltipDiv.style('z-index',10001);
+        this.tooltipDiv.style('box-shadow','0 1px 2px 0 #656565');
+
+
+        // console.log(this.tooltipDiv.style())
+
+        let first_line = '2017年<br>'
+        let second_line = '该蜂窝格网附近有：<span style="color:#d94e5d">'+d.datapoints+"</span>家店铺"
+
+        // console.log(this.tooltipDiv)
+        this.tooltipDiv.html(first_line + second_line)
+      })
+      .on('mouseout',d=>{
+        this.tooltipDiv.remove()
+      });
 
   } // drawHexmap()
 
@@ -137,7 +324,7 @@ export class EatPlaceMap2014Component implements OnInit {
 
     // create colourScale as soon as maximum number of datapoints is determined
 
-    this.colourScale = d3.scaleLog().domain([10, maxCount]).range(['#888', '#000']).interpolate(d3.interpolateHcl);
+    this.colourScale = d3.scaleLog().domain([1, maxCount]).range(['#ffe0b2', '#F71735']).interpolate(d3.interpolateHcl);
 
     return data;
 

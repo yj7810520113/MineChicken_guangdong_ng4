@@ -1,24 +1,102 @@
-<p>
-  eat-main works!
-</p>
-
+<div style="margin: 0 auto;width: 100%;height: 600px">
+  <div style="padding: 30px 40px;;color: #fff;text-align: left;font-size: 28px">
+    <span>店铺<span style="font-size: 28px;color:#d94e5d">分布对比</span></span>
+  </div>
 <div class="eat_div">
 <div class="eat_place_map_container">
+
   <div class="eat_place_map">
+    <div class="main-title">
+      2014年分布
+    </div>
     <app-eat-place-map-2014></app-eat-place-map-2014>
   </div>
+
+  <div style="height: 500px;width: 400px;float: left">
+
+    <div style="height: 70px;width: 200px;margin: 0 auto;padding: 0 auto">
+    <md-select placeholder="数据源" [(ngModel)]="selectedValue" (change)="change1()" style="margin: 0 auto;">
+      <md-option *ngFor="let food of dataSource" [value]="food">
+        {{ food }}
+      </md-option>
+    </md-select>
+    </div>
+
+    <div style="height: 70px;width: 200px;margin: 0 auto;">
+    <md-select placeholder="蜂窝网格大小" [(ngModel)]="selectedHexNum"  (change)="change1()">
+      <md-option *ngFor="let food of hexNum" [value]="food">
+        {{ food }}
+      </md-option>
+    </md-select>
+    </div>
+
+      <div style="height: 70px;width: 200px;margin: 0 auto;">
+        <div *ngIf="isEatType">
+    <md-select placeholder="餐馆类型" [(ngModel)]="selectedEatType"  (change)="change1()">
+      <md-option *ngFor="let food of eatType" [value]="food">
+        {{ food }}
+      </md-option>
+    </md-select>
+        </div>
+    </div>
+
+    <div style="height: 20px;width: 200px;margin: 125px auto 0 auto">
+      <svg height="20px" width="120px" style="margin-left: 40px">
+        <!--'#ffe0b2', '#F71735'-->
+      <defs>
+        <linearGradient id="MyGradient">
+          <stop offset="0%"  stop-color="#ffe0b2"/>
+          <stop offset="100%" stop-color="#F71735"/>
+        </linearGradient>
+      </defs>
+
+      <rect fill="url(#MyGradient)"
+            x="10" y="0" width="120" height="20"/>
+      </svg>
+
+    </div>
+
+
+    <div style="height: 70px;width: 200px;margin: 0 auto;color:#fff">
+
+      <div style="float: left;width: 100px;height: 20px;text-align: center">
+        密度小
+      </div>
+      <div style="float: left;width: 100px;height: 20px;text-align: center">
+        密度大
+      </div>
+    </div>
+
+
+  </div>
+
   <div class="eat_place_map">
+    <div class="main-title">
+      2017年分布
+    </div>
     <app-eat-place-map></app-eat-place-map>
   </div>
 </div>
 </div>
+</div>
 
 <div class="eat_div">
-<app-eat-place-type-compare></app-eat-place-type-compare>
+  <div style="width: 1500px">
+    <app-eat-place-type-compare></app-eat-place-type-compare>
+  </div>
+</div>
+
+<div class="eat_div">
+  <div style="width: 1500px">
+    <app-eat-vegemarket-map></app-eat-vegemarket-map>
+  </div>
+</div>
+
+<div class="eat_div">
+  <div style="width: 1500px">
+<app-eat-baby-milk></app-eat-baby-milk>
+  </div>
 </div>
 
 
-<app-eat-baby-milk></app-eat-baby-milk>
-
-<app-eat-vegemarket-map></app-eat-vegemarket-map>
-<app-eat-vegemarket-map-2014></app-eat-vegemarket-map-2014>
+<!--<app-eat-vegemarket-map-2014></app-eat-vegemarket-map-2014>-->

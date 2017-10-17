@@ -64,14 +64,18 @@ export class EatPlaceTypeCompareComponent implements OnInit {
 
   //柱状图的option
   option1={
-    title: {
-      text: '柱状图动画延迟'
-    },
+
     legend: {
       data: ['2014年', '2017年','增长率'],
-      align: 'left'
+      align: 'left',
+      textStyle:{
+        color:'#fff'
+      }
     },
-
+    grid:{
+      left:50
+    },
+    color:['#06D6A0','#ef476f','#FFD166'],
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -97,7 +101,7 @@ export class EatPlaceTypeCompareComponent implements OnInit {
       axisLabel: {
         inside: false,
         textStyle: {
-          color: "#000",
+          color: "#fff",
           fontSize: 12
         },
         interval: 0,
@@ -113,6 +117,9 @@ export class EatPlaceTypeCompareComponent implements OnInit {
         type: 'value',
         scale: true,
         name: '数量（家）',
+        nameTextStyle:{
+          color:'#fff'
+        },
         axisTick: {
           show: false
         },
@@ -122,16 +129,39 @@ export class EatPlaceTypeCompareComponent implements OnInit {
             type:'dashed',
           }
         },
+        axisLine: {
+          show: false
+        },
+        axisLabel: {
+          inside: false,
+          textStyle: {
+            color: "#fff",
+            fontSize: 12
+          },
+        },
       },
       {
         type: 'value',
         scale: true,
         name: '增长率（%）',
+        nameTextStyle:{
+          color:'#fff'
+        },
         axisTick: {
+          show: false
+        },
+        axisLine: {
           show: false
         },
         splitLine: {
           show: false
+        },
+        axisLabel: {
+          inside: false,
+          textStyle: {
+            color: "#fff",
+            fontSize: 12
+          },
         },
       }
     ],
@@ -157,6 +187,9 @@ export class EatPlaceTypeCompareComponent implements OnInit {
         yAxisIndex: 1,
         type: 'line',
         data: [418,285,231,295,248,308,353,200,140,100,9],
+        tooltip:{
+          formatter:'{c}%'
+        },
         animationDelay: function (idx) {
           return idx * 10 + 100;
         }
@@ -170,6 +203,23 @@ export class EatPlaceTypeCompareComponent implements OnInit {
 //  饼图2014和2017的option
   option2={
     backgroundColor: "rgba(255,255,255,0)",
+    trigger: 'item',
+    formatter: function(params, ticket, callback) {
+      // console.log(params)
+      var res = params.seriesName;
+      res += '<br/>' + params.name + ': ' + params.value+'<br/>' + params.name + '占比: ' + params.percent+"%";
+      return res;
+    },
+    color: [
+      "#c12e34",
+      "#e6b600",
+      "#0098d9",
+      "#2b821d",
+      "#005eaa",
+      "#339ca8",
+      "#cda819",
+      "#32a487"
+    ],
     title: [{
       text: '2014年',
       left: '90%',
@@ -177,9 +227,9 @@ export class EatPlaceTypeCompareComponent implements OnInit {
       textAlign: 'center',
       textBaseline: 'middle',
       textStyle: {
-        color: '#999',
+        color: '#fff',
         fontWeight: 'normal',
-        fontSize: 20
+        fontSize: 16
       }
     },
       {
@@ -189,9 +239,9 @@ export class EatPlaceTypeCompareComponent implements OnInit {
         textAlign: 'center',
         textBaseline: 'middle',
         textStyle: {
-          color: '#999',
+          color: '#d94e5d',
           fontWeight: 'normal',
-          fontSize: 16
+          fontSize: 20
         }
       },
       {
@@ -201,9 +251,9 @@ export class EatPlaceTypeCompareComponent implements OnInit {
         textAlign: 'center',
         textBaseline: 'middle',
         textStyle: {
-          color: '#999',
+          color: '#fff',
           fontWeight: 'normal',
-          fontSize: 20
+          fontSize: 16
         }
       },
       {
@@ -213,9 +263,9 @@ export class EatPlaceTypeCompareComponent implements OnInit {
         textAlign: 'center',
         textBaseline: 'middle',
         textStyle: {
-          color: '#999',
+          color: '#d94e5d',
           fontWeight: 'normal',
-          fontSize: 16
+          fontSize: 20
         }
       }],
     // legend: {

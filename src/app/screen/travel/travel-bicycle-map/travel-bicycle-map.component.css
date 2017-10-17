@@ -15,7 +15,7 @@
 
   float: left;
   padding-top: 10px;
-  background: rgba(7,170,195,.1);
+  /*background: rgba(7,170,195,.1);*/
 }
 .compare-pie-container .plot-container{
   height: 200px;

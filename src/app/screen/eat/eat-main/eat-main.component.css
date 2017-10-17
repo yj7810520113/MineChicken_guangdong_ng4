@@ -1,15 +1,31 @@
-.eat_div{
+.eat_div {
   position: relative;
   width: 100%;
   /*margin: 0 auto;*/
 }
 
+
 .eat_place_map_container{
-  width: 1000px;
+  width: 1200px;
+  height: 500px;
   margin: 0 auto;
 }
 
-.eat_place_map{
+
+.eat_place_map_container .eat_place_map:nth-child(1){
   float: left;
   width: 400px;
+  height: 500px;
+}
+.eat_place_map_container .eat_place_map:nth-child(2){
+  float: right;
+  width: 400px;
+  height: 500px;
+}
+.eat_place_map_container .eat_place_map .main-title{
+  height: 40px;
+  line-height: 40px;
+  color:#fff;
+  font-size: 22px;
+  text-align: center;
 }

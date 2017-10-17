@@ -21,6 +21,9 @@ export class TravelBicycleMapComponent implements OnInit {
   @ViewChild('echart6') private echart6;
   @ViewChild('echart7') private echart7;
 
+  private tooltipDiv;
+  private bodyNode = d3.select('body').node();
+
   private bicycleStationRadius=300;
   private busStationSum=0;
   private validRadiusPercentage=0;
@@ -127,7 +130,7 @@ export class TravelBicycleMapComponent implements OnInit {
         tooltip: {
             trigger: 'item',
             formatter: function(params, ticket, callback) {
-              console.log(params)
+              // console.log(params)
                 var res = params.seriesName;
                 res += '<br/>' + params.name + ' : ' + params.value+'<br/>' + params.name + ' 占比: ' + params.percent+"%";
                 return res;
@@ -411,12 +414,12 @@ export class TravelBicycleMapComponent implements OnInit {
     this.drawGeo(topojson1);
 
     //画出公交站点
-    this.drawBus(data2);
+    this.drawBus(data2,data1);
     this.svg.append("g")
       .attr("class","bicycle");
 
     //画出公共自行车站点
-    this.drawCircle(data1);
+    this.drawCircle(data1,data2);
 
 
 
@@ -464,11 +467,11 @@ export class TravelBicycleMapComponent implements OnInit {
 
   } // drawGeo()
 
-  drawCircle(data) {
+  drawCircle(data,data2) {
 
 
     let filter=data;
-    console.log(this.svg.select(".bicycle"))
+    // console.log(this.svg.select(".bicycle"))
 
     this.svg.select(".bicycle")
       .selectAll('circle')
@@ -477,7 +480,7 @@ export class TravelBicycleMapComponent implements OnInit {
     //                .attr('class', 'hexes')
     //                .attr('transform', function(d) { return 'translate(' + d.x + ', ' + d.y + ')'; })
     //                .attr('d', hexbin.hexagon())
-      .style('fill', 'none')
+      .style('fill', 'rgba(0,0,0,0)')
       //                .style('fill', function(d) {
       //                    if(d.datapoints==0){
       //                        return '#fff';
@@ -489,12 +492,70 @@ export class TravelBicycleMapComponent implements OnInit {
       .attr("cy",d=>this.projection([+d.lng, +d.lat])[1])
       .attr("r",3)
                .style('stroke', '#EF476F')
-               .style('stroke-width', 1);
+               .style('stroke-width', 1)
+      .on('mouseover',d=>{
+        console.log(d)
+        // console.log('mouseover')
+        d3.select('body').selectAll('div.mytooltip').remove();
+        // Append tooltip
+        this.tooltipDiv = d3.select('body')
+          .append('div')
+          .attr('class', 'mytooltip')
+        let absoluteMousePos = d3.mouse(this.bodyNode);
+        // console.log(absoluteMousePos)
+        // this.tooltipDiv.style({
+        //   'left': (absoluteMousePos[0] + 10)+'px',
+        //   'top': (absoluteMousePos[1] - 40)+'px',
+        //   'background-color': '#d8d5e4',
+        //   'width': '65px',
+        //   'height': '30px',
+        //   'padding': '5px',
+        //   'position': 'absolute',
+        //   'z-index': 1001,
+        //   'box-shadow': '0 1px 2px 0 #656565'
+        // });
+
+        this.tooltipDiv.style('left',(absoluteMousePos[0] + 10)+'px');
+        this.tooltipDiv.style('top',(absoluteMousePos[1] - 40)+'px');
+        this.tooltipDiv.style('background-color','#000');
+        this.tooltipDiv.style('color','#fff');
+        this.tooltipDiv.style('width','190px');
+        this.tooltipDiv.style('height','60  px');
+        this.tooltipDiv.style('padding','5px');
+        this.tooltipDiv.style('position','absolute');
+        this.tooltipDiv.style('font-size','12px');
+        this.tooltipDiv.style('z-index',10001);
+        this.tooltipDiv.style('box-shadow','0 1px 2px 0 #656565');
+
+
+        // console.log(this.tooltipDiv.style())
+
+        let first_line = '2017年<br>'
+        let second_line = '该公共自行车点名称：<span style="color:#EF476F">'+d['站点名称']+"</span><br>"
+
+        //计算该站点周围的公交站
+        let count=0;
+        let str='';
+        data2.forEach(d1=>{
+          if(this.getDistanceFromLatLonInKm(d['lat'],d['lng'],d1['lat'],d1['lng'])<=0.5){
+            str+=d1['站点名称']+'<br>';
+            count++;
+          }
+        });
+        second_line+='该自行车站点500m范围内有公交车站<span style="color:#d94e5d">'+count+'</span>个<br>';
+        second_line+='分别为站点：<br>'+str;
+
+        // console.log(this.tooltipDiv)
+        this.tooltipDiv.html(first_line + second_line)
+      })
+      .on('mouseout',d=>{
+        this.tooltipDiv.remove()
+      });
 
   } // drawHexmap()
 
 
-  drawBus(data) {
+  drawBus(data,data1) {
 
 
     let filter=data;
@@ -517,7 +578,65 @@ export class TravelBicycleMapComponent implements OnInit {
       .attr("cx",d=>this.projection([+d.lng, +d.lat])[0])
       .attr("cy",d=>this.projection([+d.lng, +d.lat])[1])
       .attr("r",1)
-      .style('fill', '#06D6A0');
+      .style('fill', '#06D6A0')
+      .on('mouseover',d=>{
+        console.log(d)
+        // console.log('mouseover')
+        d3.select('body').selectAll('div.mytooltip').remove();
+        // Append tooltip
+        this.tooltipDiv = d3.select('body')
+          .append('div')
+          .attr('class', 'mytooltip')
+        let absoluteMousePos = d3.mouse(this.bodyNode);
+        // console.log(absoluteMousePos)
+        // this.tooltipDiv.style({
+        //   'left': (absoluteMousePos[0] + 10)+'px',
+        //   'top': (absoluteMousePos[1] - 40)+'px',
+        //   'background-color': '#d8d5e4',
+        //   'width': '65px',
+        //   'height': '30px',
+        //   'padding': '5px',
+        //   'position': 'absolute',
+        //   'z-index': 1001,
+        //   'box-shadow': '0 1px 2px 0 #656565'
+        // });
+
+        this.tooltipDiv.style('left',(absoluteMousePos[0] + 10)+'px');
+        this.tooltipDiv.style('top',(absoluteMousePos[1] - 40)+'px');
+        this.tooltipDiv.style('background-color','#000');
+        this.tooltipDiv.style('color','#fff');
+        this.tooltipDiv.style('width','190px');
+        this.tooltipDiv.style('height','60  px');
+        this.tooltipDiv.style('padding','5px');
+        this.tooltipDiv.style('position','absolute');
+        this.tooltipDiv.style('font-size','12px');
+        this.tooltipDiv.style('z-index',10001);
+        this.tooltipDiv.style('box-shadow','0 1px 2px 0 #656565');
+
+
+        // console.log(this.tooltipDiv.style())
+
+        let first_line = '2017年<br>'
+        let second_line = '该公交站点名称：<span style="color:#06D6A0">'+d['站点名称']+"</span><br>"
+
+        //计算该站点周围的公交站
+        let count=0;
+        let str='';
+        data1.forEach(d1=>{
+          if(this.getDistanceFromLatLonInKm(d['lat'],d['lng'],d1['lat'],d1['lng'])<=0.5){
+            str+=d1['站点名称']+'<br>';
+            count++;
+          }
+        });
+        second_line+='该公交站点500m范围内有自行车点<span style="color:#06D6A0">'+count+'</span>个<br>';
+        second_line+='分别为站点：<br>'+str;
+
+        // console.log(this.tooltipDiv)
+        this.tooltipDiv.html(first_line + second_line)
+      })
+      .on('mouseout',d=>{
+        this.tooltipDiv.remove()
+      });
       // .style('stroke-width', 1);
 
   } // drawHexmap()

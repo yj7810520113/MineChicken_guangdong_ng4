@@ -19,6 +19,8 @@ export class EatVegemarketMapComponent implements OnInit {
 
 
   private projection;
+  private tooltipDiv;
+  private bodyNode = d3.select('body').node();
 
 
 
@@ -161,7 +163,7 @@ export class EatVegemarketMapComponent implements OnInit {
 //       el.lat = this.projection([+el.lng, +el.lat])[1];
 //
 //     });
-    let filter=data;
+    let filter=data.concat(data2014);
 
     this.svg.append('g')
       .selectAll('circle')
@@ -172,14 +174,15 @@ export class EatVegemarketMapComponent implements OnInit {
     //                .attr('d', hexbin.hexagon())
       .style('fill', d=>{
         if(unionSet.has(d.lng+','+d.lat)){
-          return 'green';
+          // /      //   '#FFD166','#06D6A0','#EF476F'
+          return '#FFD166';
         }
         else if(addSet.has(d.lng+','+d.lat)){
-          return 'yellow';
+          return '#06D6A0';
         }
         else if(delSet.has(d.lng+','+d.lat)){
-          console.log(d['town'])
-          return 'red';
+          // console.log(d['town'])
+          return '#EF476F';
         }
       })
       //                .style('fill', function(d) {
@@ -191,7 +194,71 @@ export class EatVegemarketMapComponent implements OnInit {
       //                })
       .attr("cx",d=>this.projection([+d.lng, +d.lat])[0])
       .attr("cy",d=>this.projection([+d.lng, +d.lat])[1])
-      .attr("r",2)
+      .attr("r",3)
+      .on('mouseover',d=>{
+        // console.log('mouseover')
+        d3.select('body').selectAll('div.mytooltip').remove();
+        // Append tooltip
+        this.tooltipDiv = d3.select('body')
+          .append('div')
+          .attr('class', 'mytooltip')
+        let absoluteMousePos = d3.mouse(this.bodyNode);
+        // console.log(absoluteMousePos)
+        // this.tooltipDiv.style({
+        //   'left': (absoluteMousePos[0] + 10)+'px',
+        //   'top': (absoluteMousePos[1] - 40)+'px',
+        //   'background-color': '#d8d5e4',
+        //   'width': '65px',
+        //   'height': '30px',
+        //   'padding': '5px',
+        //   'position': 'absolute',
+        //   'z-index': 1001,
+        //   'box-shadow': '0 1px 2px 0 #656565'
+        // });
+
+        this.tooltipDiv.style('left',(absoluteMousePos[0] + 10)+'px');
+        this.tooltipDiv.style('top',(absoluteMousePos[1] - 40)+'px');
+        this.tooltipDiv.style('background-color','#000');
+        this.tooltipDiv.style('color','#fff');
+        this.tooltipDiv.style('width','200px');
+        this.tooltipDiv.style('height','60  px');
+        this.tooltipDiv.style('padding','5px');
+        this.tooltipDiv.style('position','absolute');
+        this.tooltipDiv.style('font-size','12px');
+        this.tooltipDiv.style('z-index',10001);
+        this.tooltipDiv.style('box-shadow','0 1px 2px 0 #656565');
+
+
+        // console.log(this.tooltipDiv.style())
+
+        // console.log(d)
+        let first_line = '店铺名称：<br>'
+      //   '#FFD166','#06D6A0','#EF476F'
+      // ],
+      //   legend: {
+      //     data: [
+      //       "2014年菜市场","2017年新增菜市场","倒闭的菜市场"
+      //     ],
+        let second_line='';
+        if(unionSet.has(d.lng+','+d.lat)){
+          second_line = '<span style="color:#FFD166">'+d['名称']+'<br><br>改店铺2014年至2017均存在</span>';
+
+        }
+        if(addSet.has(d.lng+','+d.lat)){
+          second_line = '<span style="color:#06D6A0">'+d['市场名称']+'<br><br>该店铺为2014年后新增的菜市场</span>';
+
+        }
+        if(delSet.has(d.lng+','+d.lat)){
+          second_line = '<span style="color:#EF476F">'+d['名称']+'<br><br>改店铺2014年后倒闭了</span>';
+
+        }
+
+        // console.log(this.tooltipDiv)
+        this.tooltipDiv.html(first_line + second_line)
+      })
+      .on('mouseout',d=>{
+        this.tooltipDiv.remove()
+      });
 //                .style('stroke', 'red')
 //                .style('stroke-width', 5);
 
@@ -212,23 +279,23 @@ export class EatVegemarketMapComponent implements OnInit {
   option =
     {
       backgroundColor: "rgba(0,0,0,0)",
-      title: {
-        text: "我是标题，请修改",
-        subtext: "",
-        backgroundColor: "rgba(0,0,0,0)",
-        top: 10,
-        left: 10,
-        textStyle: {
-          fontSize: 18,
-          color: "#fff"
-        }
-      },
+      // title: {
+      //   text: "我是标题，请修改",
+      //   subtext: "",
+      //   backgroundColor: "rgba(0,0,0,0)",
+      //   top: 10,
+      //   left: 10,
+      //   textStyle: {
+      //     fontSize: 18,
+      //     color: "#fff"
+      //   }
+      // },
       color:[
-        'green','red','yellow'
+        '#FFD166','#06D6A0','#EF476F'
       ],
       legend: {
         data: [
-          "2014年","挂掉的","2017年"
+          "2014年菜市场","2014年后新增菜市场","2014年后倒闭的菜市场"
         ],
         align: "left",
         left: 200,
@@ -244,7 +311,7 @@ export class EatVegemarketMapComponent implements OnInit {
         trigger: "axis",
         axisPointer: {
           type: "shadow"
-        }
+        },
       },
       xAxis: {
         data: false,
@@ -317,7 +384,7 @@ export class EatVegemarketMapComponent implements OnInit {
       },
       series: [
         {
-          name: "2017年",
+          name: "2014年菜市场",
           type: "bar",
           areaStyle: {
             normal: {
@@ -325,27 +392,28 @@ export class EatVegemarketMapComponent implements OnInit {
           },
           barGap: "-100%",
           barWidth: "40%",
-          stack: null,
-          data: [
-            30,0,10,5,52,44,32,
-          ]
-        },
-        {
-          name: "2014年",
-          type: "bar",
-          areaStyle: {
-            normal: {
-            }
-          },
-          barGap: "-100%",
-          barWidth: "40%",
-          stack: null,
+          stack: 1,
           data: [
             14,0,4,3,25,14,8,
           ]
         },
         {
-          name: "挂掉的",
+          name: "2014年后新增菜市场",
+          type: "bar",
+          areaStyle: {
+            normal: {
+            }
+          },
+          barGap: "-100%",
+          barWidth: "40%",
+          stack: 1,
+          data: [
+            30,0,10,5,52,44,32,
+          ]
+        },
+
+        {
+          name: "2014年后倒闭的菜市场",
           type: "bar",
           areaStyle: {
             normal: {

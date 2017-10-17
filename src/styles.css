@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 /* fallback */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 
 @font-face {
   font-family: 'Material Icons';
@@ -85,9 +85,9 @@ body{
   /*background-size:contain;*/
 
   /*background-color: ;*/
-  background: url("assets/img/W020161118420193007473.png") no-repeat;
+  background: url("assets/img/0040039596514087_b.jpg") repeat;
   font-family:"Microsoft YaHei","simsun","Helvetica Neue";
-  background-size:cover;
+  background-size:100%;
 
   /*background: rgba(14, 15,  45, 0.9);*/
   /*background-color: #30323c*/
@@ -156,7 +156,7 @@ body{
 }
 .screenLegend .legendArea .legendEle .legendText{
   float: left;
-  width: 100px;
+  width: 120px;
   height: 35px;
   margin-left: 15px;
   color:rgb(7,170,195);

@@ -6,11 +6,24 @@ import {NET_CONFIG} from "../../config/net-config";
 import {INetConfig} from "../../config/Inet-config";
 import {Observable} from "rxjs/Observable";
 import {share} from "rxjs/operator/share";
+import {Subject} from "rxjs/Subject";
 // import  'rx-from-csv';
 // import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class EatFileReaderService {
+  //地图之间的交互
+  private selectForm=new Subject();
+  public getSelectFormSubject(){
+    return this.selectForm;
+  }
+  //data为 数据源类型，蜂窝格网大小，餐饮店类型
+  public setSelectFormSubject(data){
+    this.selectForm.next(data);
+  }
+
+
+
   private shared;
   //
   constructor(private http: Http, @Inject(NET_CONFIG) private net_config: INetConfig) {
@@ -31,6 +44,11 @@ export class EatFileReaderService {
 
   private EatBabyMilkdata;
   private EatBabyMilkObservable: Observable<any>;
+
+  private EatBabyMilkUrl2014:string = 'assets/file/trans食品流通企业2014';
+
+  private EatBabyMilkdata2014;
+  private EatBabyMilkObservable2014: Observable<any>;
 
   private EatVegeMarketMapUrl:string = 'assets/file/trans菜市场';
 
@@ -111,6 +129,29 @@ export class EatFileReaderService {
           }
         ).share();
       return this.EatBabyMilkObservable;
+    }
+  }
+
+  getEatBabyMilkData2014() {
+    if(this.EatBabyMilkdata2014) {
+      // if `data` is available just return it as `Observable`
+      return Observable.of(this.EatBabyMilkdata2014);
+    } else if(this.EatBabyMilkObservable2014) {
+      // if `this.observable` is set then the request is in progress
+      // return the `Observable` for the ongoing request
+      return this.EatBabyMilkObservable2014;
+    } else {
+      this.EatBabyMilkObservable2014 = this.readCSVFileToJson(this.EatBabyMilkUrl2014)
+        .map(response =>  {
+            // when the cached data is available we don't need the `Observable` reference anymore
+            this.EatBabyMilkObservable2014 = null;
+
+
+            this.EatBabyMilkdata2014 =response;
+            return this.EatBabyMilkdata2014;
+          }
+        ).share();
+      return this.EatBabyMilkObservable2014;
     }
   }
 

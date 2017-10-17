@@ -21,7 +21,8 @@ export class EatBabyMilkComponent implements OnInit {
   @ViewChild('echart7') private echart7;
 
 
-
+  private tooltipDiv;
+  private bodyNode = d3.select('body').node();
 
   private projection;
 
@@ -120,86 +121,233 @@ export class EatBabyMilkComponent implements OnInit {
 
     let count=1;
     for(let key of Array.from(this.townPopulationMap.keys())){
-      let  option = {
-        // tooltip: {
-        //     trigger: 'item',
-        //     formatter: function(params, ticket, callback) {
-        //         var res = params.seriesName;
-        //         res += '<br/>' + params.name + ' : ' + params.percent + '%';
-        //         return res;
-        //     }
+      // let  option = {
+      //   // tooltip: {
+      //   //     trigger: 'item',
+      //   //     formatter: function(params, ticket, callback) {
+      //   //         var res = params.seriesName;
+      //   //         res += '<br/>' + params.name + ' : ' + params.percent + '%';
+      //   //         return res;
+      //   //     }
+      //
+      //   // },
+      //   //   backgroundColor:'#0f2d55',
+      //   textStyle:{
+      //     color:'#fff'
+      //   },
+      //   itemStyle: {
+      //     normal: {
+      //       color: '#c23531',
+      //       shadowBlur: 10,
+      //       zlevel :10,
+      //       shadowColor: 'fcc',
+      //       avoidLabelOverlap :true,
+      //       shadowOffsetY :'5'
+      //     }
+      //   },
+      //   // grid: {
+      //   //   bottom: '20%',
+      //   //   left:'10%'
+      //   // },
+      //
+      //   //     title: [{
+      //   //     text: '已结案',
+      //   //     subtext:'75',
+      //   //     left: '19%',
+      //
+      //   //     top: '66%',
+      //   //     textAlign:'center',
+      //   //     textStyle: {
+      //   //         color: '#fff',
+      //   //         textAlign:'center',
+      //   //     },
+      //   //      subtextStyle:{
+      //   //         color: '#fff',
+      //   //     }
+      //
+      //   // }, {
+      //   //     text: '未结案',
+      //   //     subtext:'75',
+      //   //     left: '50%',
+      //   //     top: '66%',
+      //   //     textAlign: 'center',
+      //   //     textStyle: {
+      //   //         color: '#fff'
+      //   //     },
+      //   //      subtextStyle:{
+      //   //         color: '#fff',
+      //   //     }
+      //   // }],
+      //   // xAxis: [{
+      //   //     type: 'category',
+      //   //     axisLine: {
+      //   //         show: false
+      //   //     },
+      //   //     axisTick: {
+      //   //         show: false
+      //   //     },
+      //   //     axisLabel: {
+      //   //         interval: 0
+      //   //     },
+      //   //     data: ['正常', '同班']
+      //   // }],
+      //   // yAxis: [{
+      //   //     show: false
+      //   // }],
+      //
+      //   series: [{
+      //     name: '人口',
+      //
+      //     itemStyle: {
+      //       normal: {
+      //         color: '#01b0d1'
+      //       }
+      //     },
+      //     center: [
+      //       '50.0%',
+      //       '50%'
+      //     ],
+      //
+      //     radius: [
+      //       '75%',
+      //       '90%'
+      //     ],
+      //     type: 'pie',
+      //
+      //     labelLine: {
+      //       normal: {
+      //         show: false
+      //       }
+      //     },
+      //
+      //     data: [{
+      //       color: ['#f60'],
+      //       value: this.townPopulationMap.get(key)*bornPercentage,
+      //       name: key,
+      //       label: {
+      //         normal: {
+      //           formatter: '{d} %',
+      //           position: 'center',
+      //           show: true,
+      //           textStyle: {
+      //             fontSize: '20',
+      //             fontWeight: 'bold',
+      //             color: '#fff'
+      //           }
+      //         }
+      //       }
+      //     }, {
+      //       value: Math.round(sumPopulation*bornPercentage),
+      //       tooltip: {
+      //         show: false
+      //       },
+      //       itemStyle: {
+      //         normal: {
+      //           color: '#465262'
+      //         },
+      //         emphasis: {
+      //           color: '#0e1c3d'
+      //         }
+      //       },
+      //
+      //       hoverAnimation: false
+      //     }]
+      //   },
+      //     {
+      //       name: '婴幼儿奶粉店',
+      //
+      //       itemStyle: {
+      //         normal: {
+      //           color: '#01b0d1'
+      //         }
+      //       },
+      //       center: [
+      //         '50.0%',
+      //         '50%'
+      //       ],
+      //
+      //       radius: [
+      //         '55%',
+      //         '70%'
+      //       ],
+      //       type: 'pie',
+      //
+      //       labelLine: {
+      //         normal: {
+      //           show: false
+      //         }
+      //       },
+      //
+      //       data: [{
+      //         color: ['#f60'],
+      //         value: townMap.get(key),
+      //         name: key,
+      //         label: {
+      //           normal: {
+      //             formatter: '{d} %',
+      //             position: 'center',
+      //             show: true,
+      //             textStyle: {
+      //               fontSize: '20',
+      //               fontWeight: 'bold',
+      //               color: '#fff'
+      //             }
+      //           }
+      //         }
+      //       }, {
+      //         value: sumTownShop,
+      //         tooltip: {
+      //           show: false
+      //         },
+      //         itemStyle: {
+      //           normal: {
+      //             color: '#465262'
+      //           },
+      //           emphasis: {
+      //             color: '#0e1c3d'
+      //           }
+      //         },
+      //
+      //         hoverAnimation: false
+      //       }]
+      //     }]
+      //
+      // };
 
-        // },
-        //   backgroundColor:'#0f2d55',
-        textStyle:{
-          color:'#fff'
+
+
+      let option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: function(params, ticket, callback) {
+            console.log(params)
+            var res = params.seriesName;
+            res += '<br/>' + params.name + ': ' + params.value+'<br/>' + params.name + '占比: ' + params.percent+"%";
+            return res;
+          }
+
         },
+        //   backgroundColor:'#0f2d55',
+        // textStyle: {
+        //   color: '#fff'
+        // },
         itemStyle: {
           normal: {
             color: '#c23531',
             shadowBlur: 10,
-            zlevel :10,
+            zlevel: 10,
             shadowColor: 'fcc',
-            avoidLabelOverlap :true,
-            shadowOffsetY :'5'
+            avoidLabelOverlap: true,
+            shadowOffsetY: '5'
           }
         },
-        // grid: {
-        //   bottom: '20%',
-        //   left:'10%'
-        // },
-
-        //     title: [{
-        //     text: '已结案',
-        //     subtext:'75',
-        //     left: '19%',
-
-        //     top: '66%',
-        //     textAlign:'center',
-        //     textStyle: {
-        //         color: '#fff',
-        //         textAlign:'center',
-        //     },
-        //      subtextStyle:{
-        //         color: '#fff',
-        //     }
-
-        // }, {
-        //     text: '未结案',
-        //     subtext:'75',
-        //     left: '50%',
-        //     top: '66%',
-        //     textAlign: 'center',
-        //     textStyle: {
-        //         color: '#fff'
-        //     },
-        //      subtextStyle:{
-        //         color: '#fff',
-        //     }
-        // }],
-        // xAxis: [{
-        //     type: 'category',
-        //     axisLine: {
-        //         show: false
-        //     },
-        //     axisTick: {
-        //         show: false
-        //     },
-        //     axisLabel: {
-        //         interval: 0
-        //     },
-        //     data: ['正常', '同班']
-        // }],
-        // yAxis: [{
-        //     show: false
-        // }],
 
         series: [{
-          name: '人口',
+          name: '出生人口',
 
           itemStyle: {
             normal: {
-              color: '#01b0d1'
+              color: '#118AB2'
             }
           },
           center: [
@@ -221,20 +369,16 @@ export class EatBabyMilkComponent implements OnInit {
 
           data: [{
             color: ['#f60'],
-            value: this.townPopulationMap.get(key)*bornPercentage,
+            value: Math.round(this.townPopulationMap.get(key)*bornPercentage),
             name: key,
             label: {
               normal: {
-                formatter: '{d} %',
-                position: 'center',
-                show: true,
+                show: false,
                 textStyle: {
-                  fontSize: '20',
-                  fontWeight: 'bold',
-                  color: '#fff'
+                  fontSize: 12
                 }
               }
-            }
+            },
           }, {
             value: Math.round(sumPopulation*bornPercentage),
             tooltip: {
@@ -242,13 +386,20 @@ export class EatBabyMilkComponent implements OnInit {
             },
             itemStyle: {
               normal: {
-                color: '#465262'
+                color: 'rgba(14, 15, 45, 0.95)'
               },
               emphasis: {
-                color: '#0e1c3d'
+                color: 'rgba(14, 15, 45, 0.95)'
               }
             },
-
+            label: {
+              normal: {
+                show: false,
+                textStyle: {
+                  fontSize: 12
+                }
+              }
+            },
             hoverAnimation: false
           }]
         },
@@ -257,7 +408,7 @@ export class EatBabyMilkComponent implements OnInit {
 
             itemStyle: {
               normal: {
-                color: '#01b0d1'
+                color: '#EF476F'
               }
             },
             center: [
@@ -266,8 +417,8 @@ export class EatBabyMilkComponent implements OnInit {
             ],
 
             radius: [
-              '55%',
-              '70%'
+              '60%',
+              '75%'
             ],
             type: 'pie',
 
@@ -283,33 +434,37 @@ export class EatBabyMilkComponent implements OnInit {
               name: key,
               label: {
                 normal: {
-                  formatter: '{d} %',
-                  position: 'center',
-                  show: true,
+                  show: false,
                   textStyle: {
-                    fontSize: '20',
-                    fontWeight: 'bold',
-                    color: '#fff'
+                    fontSize: 12
                   }
                 }
-              }
+              },
             }, {
-              value: sumTownShop,
+              value:  sumTownShop,
               tooltip: {
                 show: false
               },
               itemStyle: {
                 normal: {
-                  color: '#465262'
+                  color: 'rgba(14, 15, 45, 0.95)'
                 },
                 emphasis: {
-                  color: '#0e1c3d'
+                  color: 'rgba(14, 15, 45, 0.95)'
                 }
               },
-
+              label: {
+                normal: {
+                  show: false,
+                  textStyle: {
+                    fontSize: 12
+                  }
+                }
+              },
               hoverAnimation: false
             }]
-          }]
+          }
+        ]
 
       };
 
@@ -379,24 +534,26 @@ export class EatBabyMilkComponent implements OnInit {
 
     // console.log(data)
 
-    // let filter=data;
-
     let filter=data;
+
+    // let filter=Object.assign({},data);
     // console.log(filter)
-    filter.forEach((el)=> {
-
-//                let obj = {};
-      el.lng = this.projection([+el.lng, +el.lat])[0];
-      el.lat = this.projection([+el.lng, +el.lat])[1];
-
-    });
+//     filter.forEach((el)=> {
+//
+// //                let obj = {};
+//       el.lng = this.projection([+el.lng, +el.lat])[0];
+//       el.lat = this.projection([+el.lng, +el.lat])[1];
+//
+//     });
     // console.log(filter)
+    //EF476F
 
+    // console.log(filter)
     this.svg.append('g')
-      .selectAll('image')
+      .selectAll('circle')
       .data(filter)
-      .enter().append('image')
-          .attr('xlink:href','./assets/img/奶粉.png')
+      .enter().append('circle')
+          // .attr('xlink:href','./assets/img/奶粉.png')
       //                .attr('class', 'hexes')
       //                .attr('transform', function(d) { return 'translate(' + d.x + ', ' + d.y + ')'; })
       //                .attr('d', hexbin.hexagon())
@@ -409,11 +566,56 @@ export class EatBabyMilkComponent implements OnInit {
       //                        return colourScale(d.datapoints);
       //                })
       // .attr('transform',d=>'translate('+d.lng+',')
-      .attr("x",d=>d.lng)
-      .attr("y",d=>d.lat)
+      .attr("r","3")
+      .attr("cx",d=>this.projection([+d.lng, +d.lat])[0])
+      .attr("cy",d=>this.projection([+d.lng, +d.lat])[1])
       // .attr("transform","scale(0.01)")
-      .attr('height',8)
-      .attr('width',8);
+      .attr("fill",'#EF476F')
+      .on('mouseover',d=>{
+        // console.log('mouseover')
+        d3.select('body').selectAll('div.mytooltip').remove();
+        // Append tooltip
+        this.tooltipDiv = d3.select('body')
+          .append('div')
+          .attr('class', 'mytooltip')
+        let absoluteMousePos = d3.mouse(this.bodyNode);
+        // console.log(absoluteMousePos)
+        // this.tooltipDiv.style({
+        //   'left': (absoluteMousePos[0] + 10)+'px',
+        //   'top': (absoluteMousePos[1] - 40)+'px',
+        //   'background-color': '#d8d5e4',
+        //   'width': '65px',
+        //   'height': '30px',
+        //   'padding': '5px',
+        //   'position': 'absolute',
+        //   'z-index': 1001,
+        //   'box-shadow': '0 1px 2px 0 #656565'
+        // });
+
+        this.tooltipDiv.style('left',(absoluteMousePos[0] + 10)+'px');
+        this.tooltipDiv.style('top',(absoluteMousePos[1] - 40)+'px');
+        this.tooltipDiv.style('background-color','#000');
+        this.tooltipDiv.style('color','#fff');
+        this.tooltipDiv.style('width','200px');
+        this.tooltipDiv.style('height','60  px');
+        this.tooltipDiv.style('padding','5px');
+        this.tooltipDiv.style('position','absolute');
+        this.tooltipDiv.style('font-size','12px');
+        this.tooltipDiv.style('z-index',10001);
+        this.tooltipDiv.style('box-shadow','0 1px 2px 0 #656565');
+
+
+        // console.log(this.tooltipDiv.style())
+
+        let first_line = '2017年<br>'
+        let second_line = '婴幼儿奶粉店名：<br><span style="color:#d94e5d">'+d['名称']+'</span><br>经营项目:<br><span style="color:#d94e5d">'+d['经营项目']+'</span>';
+
+        // console.log(this.tooltipDiv)
+        this.tooltipDiv.html(first_line + second_line)
+      })
+      .on('mouseout',d=>{
+        this.tooltipDiv.remove()
+      });
 //                .style('stroke', 'red')
 //                .style('stroke-width', 5);
 

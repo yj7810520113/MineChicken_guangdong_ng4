@@ -1,0 +1,53 @@
+.eat-baby-container{
+  width: 500px;
+  height: 100%;
+  float: left;
+}
+.between-container{
+  width: 200px;
+  height: 100%;
+  float: left;
+}
+
+.compare-pie-container{
+  width:800px;
+  height: 450px;
+
+  float: left;overflow-x:;
+  padding-top: 10px;
+  /*background: rgba(14, 15, 45, 1);*/
+}
+.compare-pie-container .plot-container{
+  height: 200px;
+  float: left;
+
+
+}
+.compare-pie-container .main-title{
+  height: 20px;
+  width: 100%;
+  color:#07bbc3;
+  font-size: 18px;
+  text-align: center;
+  /*background-color: rgba(7,170,195,.2);*/
+}
+.compare-pie-container .main-plot-container{
+  height: 200px;
+  width: 200px;
+  float: left;
+}
+.compare-pie-container .main-plot-container:nth-child(6){
+  margin-left: 100px;
+}
+.compare-pie-container .main-plot-container .plot-title{
+  height: 20px;
+  width: 100%;
+  text-align: center;
+  color:#07bbc3;
+  font-size: 16px;
+}
+.compare-pie-container .main-plot-container .plot-area{
+  height: 180px;
+  width: 180px;
+  margin: 10px 0;
+}

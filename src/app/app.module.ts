@@ -37,6 +37,7 @@ import {TravelModuleModule} from "./screen/travel/travel-module/travel-module.mo
 import { TravelBicycleMapComponent } from './screen/travel/travel-bicycle-map/travel-bicycle-map.component';
 import { TravelMainComponent } from './screen/travel/travel-main/travel-main.component';
 import { TravelAqiComponent } from './screen/travel/travel-aqi/travel-aqi.component';
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 
 @NgModule({
@@ -83,7 +84,9 @@ import { TravelAqiComponent } from './screen/travel/travel-aqi/travel-aqi.compon
     Ng2PageScrollModule,
     NgbModule.forRoot(),
   ],
-  providers: [D3Service, SharedVariableService,FileReaderService,HttpService,
+  providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    D3Service, SharedVariableService,FileReaderService,HttpService,
     {provide: BusyConfig, useFactory: BusyConfigFactory},
     {
       provide: NET_CONFIG,

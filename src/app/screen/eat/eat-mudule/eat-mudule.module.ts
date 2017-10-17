@@ -12,12 +12,17 @@ import {BusyConfig, BusyModule} from "angular2-busy";
 import {EatBabyMilkComponent} from "../eat-baby-milk/eat-baby-milk.component";
 import {EatVegemarketMapComponent} from "../eat-vegemarket-map/eat-vegemarket-map.component";
 import {EatVegemarketMap2014Component} from "../eat-vegemarket-map-2014/eat-vegemarket-map-2014.component";
+import {MdSelectModule} from "@angular/material";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     BusyModule,
-    RouterModule.forChild(eatRouters)
+    RouterModule.forChild(eatRouters),
+    MdSelectModule,
+
   ],
   providers:[
     EatFileReaderService,

@@ -1,5 +1,50 @@
-<p>
-  eat-vegemarket-map works!
-</p>
+<div style="margin: 50px auto 0 auto;width: 100%;height: 600px">
+  <div style="padding: 30px 40px;;color: #fff;text-align: left;font-size: 28px">
+    <span>菜市场<span style="font-size: 28px;color:#d94e5d">的变迁</span></span>
+  </div>
+  <div style="height: 400px;width: 1200px;margin: 0 auto">
+    <div style="float: left">
 <svg #svg></svg>
+    </div>
+
+    <!--'#FFD166','#06D6A0','#EF476F'-->
+
+    <div class="between-container">
+      <div class="screenLegend plotArea">
+        <div class="legendTitle">图例</div>
+        <div class="legendArea">
+          <div class="legendEle">
+            <div class="legendPlot">
+              <svg height="25px" width="40px">
+                <rect width="40" height="25" fill="#FFD166"></rect>
+              </svg>
+            </div>
+            <div class="legendText">2014年菜市场</div>
+          </div>
+
+          <div class="legendEle">
+          <div class="legendPlot">
+            <svg height="25px" width="40px">
+              <rect width="40" height="25" fill="#06D6A0"></rect>
+            </svg>
+          </div>
+          <div class="legendText">2014年后新增菜市场</div>
+        </div>
+
+          <div class="legendEle">
+            <div class="legendPlot">
+              <svg height="25px" width="40px">
+                <rect width="40" height="25" fill="#EF476F"></rect>
+              </svg>
+            </div>
+            <div class="legendText">2014年后倒闭的菜市场</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div style="float: right">
 <div #echart style="height: 400px;width: 600px;"></div>
+    </div>
+</div>
+</div>
